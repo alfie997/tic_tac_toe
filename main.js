@@ -42,6 +42,8 @@
 //     }
 // }
 
+let game = true;
+
 const gameBoard = [
     [ '_','#','_','|','_','#','_','|','_','#','_' ],
     [ '_','#','_','|','_','#','_','|','_','#','_' ],
@@ -71,7 +73,44 @@ function switchPlayer() {
     }
     console.log(`player ${player}: select cell`);
 }
- 
+
+function checkGame() {
+    // let inARow = 0;
+    // for (const row of gameBoard) {
+    //     for (const column of gameBoard)
+    //         if (column === "x") {
+    //             inARow++;
+    //         }
+    //         if (inARow === 3) {
+    //             break;
+    //         }
+    // }
+
+    if (gameBoard[0][1] == "x" && gameBoard[0][5] == "x" && gameBoard[0][9] == "x"
+        || gameBoard[0][1] == "x" && gameBoard[1][1] == "x" && gameBoard[2][1] == "x"
+        || gameBoard[0][1] == "x" && gameBoard[1][5] == "x" && gameBoard[2][9] == "x"
+        || gameBoard[0][9] == "x" && gameBoard[1][5] == "x" && gameBoard[2][1] == "x"
+        || gameBoard[0][5] == "x" && gameBoard[1][5] == "x" && gameBoard[2][5] == "x"
+        || gameBoard[1][1] == "x" && gameBoard[1][5] == "x" && gameBoard[1][9] == "x"
+        || gameBoard[0][9] == "x" && gameBoard[1][9] == "x" && gameBoard[2][9] == "x"
+        || gameBoard[2][1] == "x" && gameBoard[2][5] == "x" && gameBoard[2][9] == "x") {
+            console.log(`player x wins!`);
+            game = false;
+    }
+
+    if (gameBoard[0][1] == "o" && gameBoard[0][5] == "o" && gameBoard[0][9] == "o"
+        || gameBoard[0][1] == "o" && gameBoard[1][1] == "o" && gameBoard[2][1] == "o"
+        || gameBoard[0][1] == "o" && gameBoard[1][5] == "o" && gameBoard[2][9] == "o"
+        || gameBoard[0][9] == "o" && gameBoard[1][5] == "o" && gameBoard[2][1] == "o"
+        || gameBoard[0][5] == "o" && gameBoard[1][5] == "o" && gameBoard[2][5] == "o"
+        || gameBoard[1][1] == "o" && gameBoard[1][5] == "o" && gameBoard[1][9] == "o"
+        || gameBoard[0][9] == "o" && gameBoard[1][9] == "o" && gameBoard[2][9] == "o"
+        || gameBoard[2][1] == "o" && gameBoard[2][5] == "o" && gameBoard[2][9] == "o") {
+            console.log(`player o wins!`);
+            game = false;
+    }
+}
+
 function playRound(cell) {
     if (cell === "top left" && gameBoard[0][1] === "#") {
         if (player === "x") {
@@ -93,7 +132,7 @@ function playRound(cell) {
         } else {
             gameBoard[0][9] = "o";
         }
-    } 
+    }
     if (cell === "center left" && gameBoard[1][1] === "#") {
         if (player === "x") {
             gameBoard[1][1] = "x";
@@ -137,7 +176,8 @@ function playRound(cell) {
         }
     }
     displayBoard();
-    switchPlayer();
+    checkGame();
+    if (game === true) switchPlayer();
 }
 
 // function playGame() {
