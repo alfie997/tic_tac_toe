@@ -23,76 +23,126 @@
 
 const gameBoard = (function () {
     const board = [
-        [ '_','#','_','|','_','#','_','|','_','#','_' ],
-        [ '_','#','_','|','_','#','_','|','_','#','_' ],
-        [ ' ','#',' ','|',' ','#',' ','|',' ','#',' ' ]
+        [ '_',1,'_','|','_',2,'_','|','_',3,'_' ],
+        [ '_',4,'_','|','_',5,'_','|','_',6,'_' ],
+        [ ' ',7,' ','|',' ',8,' ','|',' ',9,' ' ]
     ];
 
-    const addExOh = (cell) => {
-        columns = "x";
-
-        // const cells = 10;
-        // for (const rows of board) {
-        //     for (const columns of rows) {
-        //         for (let i = 1; i < cells; i++) {
-        //             if (cell === i && columns === "#") 
-        //         }
-        //     }
-        // }
-    }
-
-    return { 
-        board
-    };
-})();
-
-const interface = (function () {
-    const displayBoard = () => {
-        const board = gameBoard.board;
-        let string = "";
-        for (const row of board) {
-            for (const column of row) {
-                string += column;
+    const updateBoard = (cell) => {
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j] === cell) {
+                    board[i][j] = players.getPlayer();
+                }
             }
-            string += "\n";
         }
-        console.log(string);
     };
 
-    const askInput = () => {
-        console.log(
-        "pick a cell:\n",
-        "(1) top left\n",
-        "(2) top center\n",
-        "(3) top right\n",
-        "(4) middle left\n",
-        "(5) middle center\n",
-        "(6) middle right\n",
-        "(7) bottom left\n",
-        "(8) bottom center\n",
-        "(9) bottom right"
-        );
+    const getBoard = () => {
+        return board;
     };
 
     return {
-        displayBoard,
-        askInput
+        updateBoard,
+        getBoard
     };
 })();
 
-function Cell() {
-    let cell = 0;
+const players = (function () {
+    const playerX = "X";
+    const playerO = "O";
 
-    const getCell = () => {
+    let currentPlayer = playerX;
 
+    const switchPlayers = () => {
+        if (currentPlayer === playerX) {
+            currentPlayer = playerO;
+        } else {
+            currentPlayer = playerX;
+        }
     };
 
-}
+    const getPlayer = () => {
+        return currentPlayer;
+    }
 
-interface.displayBoard();
-interface.askInput();
+    return {
+        switchPlayers,
+        getPlayer
+    };
+})();
 
+// function createPlayer() {
+//     const playerX = "X";
+//     const playerO = "O";
 
+//     let currentPlayer = "X";
+//     // let reputation = 0;
+
+//     const switchPlayers = () => {
+//         currentPlayer = "O";
+//         // reputation++;
+//     };
+
+//     const getPlayer = () => {
+//         return currentPlayer;
+//     }
+
+//     return {
+//         switchPlayers,
+//         getPlayer
+//     };
+// }
+
+// const player = createPlayer();
+
+// const interface = (function () {
+//     let cell = 0;
+
+//     const displayBoard = () => {
+//         let board = [];
+//         board = gameBoard.getBoard;
+//         let string = "";
+//         for (const row of board) {
+//             for (const column of row) {
+//                 string += column;
+//             }
+//             string += "\n";
+//         }
+//         console.log(string);
+//     };
+
+//     const askInput = () => {
+//         console.log("pick a cell");
+//     };
+
+//     const pick = (cell) => {
+//         gameBoard.updateBoard(cell);
+//         players.switchPlayers();
+//         displayBoard();
+//     };
+
+//     return {
+//         displayBoard,
+//         askInput,
+//         pick
+//     };
+// })();
+
+// interface.displayBoard();
+// interface.askInput();
+
+// function Cell() {
+//     let cell = 0;
+
+//     const getCell = () => {
+
+//     };
+
+//     return {
+//         getCell
+//     };
+// }
 
 // let game = true;
 
