@@ -1,4 +1,144 @@
-// const gameBoard = (function () {
+const gameBoard = (function () {
+    const board = [
+        [ '_',1,'_','|','_',2,'_','|','_',3,'_' ],
+        [ '_',4,'_','|','_',5,'_','|','_',6,'_' ],
+        [ ' ',7,' ','|',' ',8,' ','|',' ',9,' ' ]
+    ];
+
+    const updateBoard = (cell) => {
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j] === cell &&
+                    !(board[i][j] === "X" && board[i][j] === "O")) {
+                    board[i][j] = players.getPlayer();
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    const checkGame = () => {
+        if (board[0][1] == "X" && board[0][5] == "X" && board[0][9] == "X"
+            || board[0][1] == "X" && board[1][1] == "X" && board[2][1] == "X"
+            || board[0][1] == "X" && board[1][5] == "X" && board[2][9] == "X"
+            || board[0][9] == "X" && board[1][5] == "X" && board[2][1] == "X"
+            || board[0][5] == "X" && board[1][5] == "X" && board[2][5] == "X"
+            || board[1][1] == "X" && board[1][5] == "X" && board[1][9] == "X"
+            || board[0][9] == "X" && board[1][9] == "X" && board[2][9] == "X"
+            || board[2][1] == "X" && board[2][5] == "X" && board[2][9] == "X") {
+                players.assignWinner("X");
+                return false;
+        }
+        if (board[0][1] == "O" && board[0][5] == "O" && board[0][9] == "O"
+            || board[0][1] == "O" && board[1][1] == "O" && board[2][1] == "O"
+            || board[0][1] == "O" && board[1][5] == "O" && board[2][9] == "O"
+            || board[0][9] == "O" && board[1][5] == "O" && board[2][1] == "O"
+            || board[0][5] == "O" && board[1][5] == "O" && board[2][5] == "O"
+            || board[1][1] == "O" && board[1][5] == "O" && board[1][9] == "O"
+            || board[0][9] == "O" && board[1][9] == "O" && board[2][9] == "O"
+            || board[2][1] == "O" && board[2][5] == "O" && board[2][9] == "O") {
+                players.assignWinner("O");
+                return false;
+        }
+        return true;
+    };
+
+    const getBoard = () => {
+        return board;
+    };
+
+    return {
+        updateBoard,
+        checkGame,
+        getBoard
+    };
+})();
+
+const players = (function () {
+    const playerX = "X";
+    const playerO = "O";
+
+    let currentPlayer = playerX;
+
+    const switchPlayers = () => {
+        if (currentPlayer === playerX) {
+            currentPlayer = playerO;
+        } else {
+            currentPlayer = playerX;
+        }
+    };
+
+    const assignWinner = (player) => {
+        currentPlayer = player;
+    }
+
+    const getPlayer = () => {
+        return currentPlayer;
+    }
+
+    return {
+        switchPlayers,
+        assignWinner,
+        getPlayer
+    };
+})();
+
+const interface = (function () {
+    let cell = 0;
+    let game = true;
+
+    const displayBoard = () => {
+        // let board = [];
+        const board = gameBoard.getBoard();
+        // console.log(board);
+        let string = "";
+        for (const row of board) {
+            for (const column of row) {
+                string += column;
+            }
+            string += "\n";
+        }
+        console.log(string);
+    };
+
+    const askInput = () => {
+        // console.log("pick a cell");
+        console.log(`player ${players.getPlayer()}: pick a cell`);
+    };
+
+    const declareWinner = () => {
+        console.log(`player ${players.getPlayer()} wins!`);
+    }
+
+    const pick = (cell) => {
+        // let picked = false;
+        if (game) {
+            const picked = gameBoard.updateBoard(cell);
+            if (picked) {
+                players.switchPlayers();
+            }
+            displayBoard();
+            game = gameBoard.checkGame();
+            if (game) {
+                askInput();
+            } else {
+                declareWinner();
+            }
+        }
+    };
+
+    return {
+        displayBoard,
+        askInput,
+        pick
+    };
+})();
+
+interface.displayBoard();
+interface.askInput();
+
+// const board = (function () {
 //     const board = [
 //         "_#_|_#_|_#_",
 //         "_#_|_#_|_#_",
@@ -19,58 +159,7 @@
 
 // }
 
-// gameBoard.displayBoard();
-
-const gameBoard = (function () {
-    const board = [
-        [ '_',1,'_','|','_',2,'_','|','_',3,'_' ],
-        [ '_',4,'_','|','_',5,'_','|','_',6,'_' ],
-        [ ' ',7,' ','|',' ',8,' ','|',' ',9,' ' ]
-    ];
-
-    const updateBoard = (cell) => {
-        for (let i = 0; i < board.length; i++) {
-            for (let j = 0; j < board[i].length; j++) {
-                if (board[i][j] === cell) {
-                    board[i][j] = players.getPlayer();
-                }
-            }
-        }
-    };
-
-    const getBoard = () => {
-        return board;
-    };
-
-    return {
-        updateBoard,
-        getBoard
-    };
-})();
-
-const players = (function () {
-    const playerX = "X";
-    const playerO = "O";
-
-    let currentPlayer = playerX;
-
-    const switchPlayers = () => {
-        if (currentPlayer === playerX) {
-            currentPlayer = playerO;
-        } else {
-            currentPlayer = playerX;
-        }
-    };
-
-    const getPlayer = () => {
-        return currentPlayer;
-    }
-
-    return {
-        switchPlayers,
-        getPlayer
-    };
-})();
+// board.displayBoard();
 
 // function createPlayer() {
 //     const playerX = "X";
@@ -95,42 +184,6 @@ const players = (function () {
 // }
 
 // const player = createPlayer();
-
-// const interface = (function () {
-//     let cell = 0;
-
-//     const displayBoard = () => {
-//         let board = [];
-//         board = gameBoard.getBoard;
-//         let string = "";
-//         for (const row of board) {
-//             for (const column of row) {
-//                 string += column;
-//             }
-//             string += "\n";
-//         }
-//         console.log(string);
-//     };
-
-//     const askInput = () => {
-//         console.log("pick a cell");
-//     };
-
-//     const pick = (cell) => {
-//         gameBoard.updateBoard(cell);
-//         players.switchPlayers();
-//         displayBoard();
-//     };
-
-//     return {
-//         displayBoard,
-//         askInput,
-//         pick
-//     };
-// })();
-
-// interface.displayBoard();
-// interface.askInput();
 
 // function Cell() {
 //     let cell = 0;
@@ -158,93 +211,93 @@ const players = (function () {
 // }
 
 // function checkGame() {
-//     if (gameBoard[0][1] == "x" && gameBoard[0][5] == "x" && gameBoard[0][9] == "x"
-//         || gameBoard[0][1] == "x" && gameBoard[1][1] == "x" && gameBoard[2][1] == "x"
-//         || gameBoard[0][1] == "x" && gameBoard[1][5] == "x" && gameBoard[2][9] == "x"
-//         || gameBoard[0][9] == "x" && gameBoard[1][5] == "x" && gameBoard[2][1] == "x"
-//         || gameBoard[0][5] == "x" && gameBoard[1][5] == "x" && gameBoard[2][5] == "x"
-//         || gameBoard[1][1] == "x" && gameBoard[1][5] == "x" && gameBoard[1][9] == "x"
-//         || gameBoard[0][9] == "x" && gameBoard[1][9] == "x" && gameBoard[2][9] == "x"
-//         || gameBoard[2][1] == "x" && gameBoard[2][5] == "x" && gameBoard[2][9] == "x") {
+//     if (board[0][1] == "x" && board[0][5] == "x" && board[0][9] == "x"
+//         || board[0][1] == "x" && board[1][1] == "x" && board[2][1] == "x"
+//         || board[0][1] == "x" && board[1][5] == "x" && board[2][9] == "x"
+//         || board[0][9] == "x" && board[1][5] == "x" && board[2][1] == "x"
+//         || board[0][5] == "x" && board[1][5] == "x" && board[2][5] == "x"
+//         || board[1][1] == "x" && board[1][5] == "x" && board[1][9] == "x"
+//         || board[0][9] == "x" && board[1][9] == "x" && board[2][9] == "x"
+//         || board[2][1] == "x" && board[2][5] == "x" && board[2][9] == "x") {
 //             console.log(`player x wins!`);
 //             game = false;
 //     }
 
-//     if (gameBoard[0][1] == "o" && gameBoard[0][5] == "o" && gameBoard[0][9] == "o"
-//         || gameBoard[0][1] == "o" && gameBoard[1][1] == "o" && gameBoard[2][1] == "o"
-//         || gameBoard[0][1] == "o" && gameBoard[1][5] == "o" && gameBoard[2][9] == "o"
-//         || gameBoard[0][9] == "o" && gameBoard[1][5] == "o" && gameBoard[2][1] == "o"
-//         || gameBoard[0][5] == "o" && gameBoard[1][5] == "o" && gameBoard[2][5] == "o"
-//         || gameBoard[1][1] == "o" && gameBoard[1][5] == "o" && gameBoard[1][9] == "o"
-//         || gameBoard[0][9] == "o" && gameBoard[1][9] == "o" && gameBoard[2][9] == "o"
-//         || gameBoard[2][1] == "o" && gameBoard[2][5] == "o" && gameBoard[2][9] == "o") {
+//     if (board[0][1] == "o" && board[0][5] == "o" && board[0][9] == "o"
+//         || board[0][1] == "o" && board[1][1] == "o" && board[2][1] == "o"
+//         || board[0][1] == "o" && board[1][5] == "o" && board[2][9] == "o"
+//         || board[0][9] == "o" && board[1][5] == "o" && board[2][1] == "o"
+//         || board[0][5] == "o" && board[1][5] == "o" && board[2][5] == "o"
+//         || board[1][1] == "o" && board[1][5] == "o" && board[1][9] == "o"
+//         || board[0][9] == "o" && board[1][9] == "o" && board[2][9] == "o"
+//         || board[2][1] == "o" && board[2][5] == "o" && board[2][9] == "o") {
 //             console.log(`player o wins!`);
 //             game = false;
 //     }
 // }
 
 // function playRound(cell) {
-//     if (cell === "top left" && gameBoard[0][1] === "#") {
+//     if (cell === "top left" && board[0][1] === "#") {
 //         if (player === "x") {
-//             gameBoard[0][1] = "x";
+//             board[0][1] = "x";
 //         } else {
-//             gameBoard[0][1] = "o";
+//             board[0][1] = "o";
 //         }
 //     }
-//     if (cell === "top middle" && gameBoard[0][5] === "#") {
+//     if (cell === "top middle" && board[0][5] === "#") {
 //         if (player === "x") {
-//             gameBoard[0][5] = "x";
+//             board[0][5] = "x";
 //         } else {
-//             gameBoard[0][5] = "o";
+//             board[0][5] = "o";
 //         }
 //     }
-//     if (cell === "top right" && gameBoard[0][9] === "#") {
+//     if (cell === "top right" && board[0][9] === "#") {
 //         if (player === "x") {
-//             gameBoard[0][9] = "x";
+//             board[0][9] = "x";
 //         } else {
-//             gameBoard[0][9] = "o";
+//             board[0][9] = "o";
 //         }
 //     }
-//     if (cell === "center left" && gameBoard[1][1] === "#") {
+//     if (cell === "center left" && board[1][1] === "#") {
 //         if (player === "x") {
-//             gameBoard[1][1] = "x";
+//             board[1][1] = "x";
 //         } else {
-//             gameBoard[1][1] = "o";
+//             board[1][1] = "o";
 //         }
 //     }
-//     if (cell === "center middle" && gameBoard[1][5] === "#") {
+//     if (cell === "center middle" && board[1][5] === "#") {
 //         if (player === "x") {
-//             gameBoard[1][5] = "x";
+//             board[1][5] = "x";
 //         } else {
-//             gameBoard[1][5] = "o";
+//             board[1][5] = "o";
 //         }
 //     }
-//     if (cell === "center right" && gameBoard[1][9] === "#") {
+//     if (cell === "center right" && board[1][9] === "#") {
 //         if (player === "x") {
-//             gameBoard[1][9] = "x";
+//             board[1][9] = "x";
 //         } else {
-//             gameBoard[1][9] = "o";
+//             board[1][9] = "o";
 //         }
 //     }
-//     if (cell === "bottom left" && gameBoard[2][1] === "#") {
+//     if (cell === "bottom left" && board[2][1] === "#") {
 //         if (player === "x") {
-//             gameBoard[2][1] = "x";
+//             board[2][1] = "x";
 //         } else {
-//             gameBoard[2][1] = "o";
+//             board[2][1] = "o";
 //         }
 //     }
-//     if (cell === "bottom middle" && gameBoard[2][5] === "#") {
+//     if (cell === "bottom middle" && board[2][5] === "#") {
 //         if (player === "x") {
-//             gameBoard[2][5] = "x";
+//             board[2][5] = "x";
 //         } else {
-//             gameBoard[2][5] = "o";
+//             board[2][5] = "o";
 //         }
 //     }
-//     if (cell === "bottom right" && gameBoard[2][9] === "#") {
+//     if (cell === "bottom right" && board[2][9] === "#") {
 //         if (player === "x") {
-//             gameBoard[2][9] = "x";
+//             board[2][9] = "x";
 //         } else {
-//             gameBoard[2][9] = "o";
+//             board[2][9] = "o";
 //         }
 //     }
 //     displayBoard();
@@ -252,7 +305,7 @@ const players = (function () {
 //     if (game === true) switchPlayer();
 // }
 
-// for (const row of gameBoard) {
+// for (const row of board) {
 //     for (const column of row) {
 //     }
 //     console.log(row);
@@ -260,7 +313,7 @@ const players = (function () {
 
 // let string = "";
 
-// for (const row of gameBoard) {
+// for (const row of board) {
 //     for (const column of row) {
 //         string += column;
 //     }
