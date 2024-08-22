@@ -116,7 +116,7 @@ const controller = (function () {
     };
 
     const askInput = () => {
-        // console.log(round);
+        console.log(round);
         console.log(`player ${players.getPlayer()}: pick a cell`);
     };
 
@@ -159,33 +159,86 @@ const controller = (function () {
         }
     };
 
+    const getState = () => {
+        if (game === false && round < 9) {
+            return "win";
+        } else if (game === false) {
+            return "tie";
+        }
+        if (players.getPlayer() === "X") {
+            return "X";
+        } else {
+            return "O";
+        }
+    };
+
+    const getGame = () => {
+        return game;
+    }
+
     return {
         displayBoard,
         askInput,
         pick,
-        retry
+        retry,
+        getState,
+        getGame
     };
 })();
 
-controller.displayBoard();
-controller.askInput();
-
 function controlGUI() {
     const cells = document.querySelectorAll(".container div");
-    console.log(cells);
+    const retry = document.querySelector(".retry");
+    const state = document.querySelector(".state");
+    // console.log(cells);
 
-    // cells[1].textContent = "X";
-    for (let i = 0; i < cells.length; i++) {
-        cells[i].addEventListener("click", (e) => {
-            if (players.getPlayer() === "X") {
-                controller.pick(i+1);
-                cells[i].textContent = "X";
-            } else {
-                controller.pick(i+1);
-                cells[i].textContent = "O";
+    const displayState = () => {
+        // state.textContent = ""
+        if (controller.getState() === "X") {
+            state.textContent = "player X to play"
+        } else if (controller.getState() === "O") {
+            state.textContent = "player O to play"
+        }
+        if (controller.getState() === "win") {
+            state.textContent = `player ${players.getPlayer()} wins`;
+        } else if (controller.getState() === "tie") {
+            state.textContent = "it's a tie";
+        }
+    };
+
+    displayState();
+
+    const handleInput = () => {
+        // cells[1].textContent = "X";
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].addEventListener("click", (e) => {
+                if (controller.getGame() === true &&
+                    !(cells[i].textContent === "X" || cells[i].textContent === "O")) {
+                    if (players.getPlayer() === "X") {
+                        controller.pick(i+1);
+                        cells[i].textContent = "X";
+                    } else {
+                        controller.pick(i+1);
+                        cells[i].textContent = "O";
+                    }
+                }
+                displayState();
+            });
+        }
+
+        retry.addEventListener("click", (e) => {
+            controller.retry();
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].textContent = "";
             }
+            displayState();
         });
-    }
+    };
+
+    handleInput();
 }
+
+controller.displayBoard();
+controller.askInput();
 
 controlGUI();
