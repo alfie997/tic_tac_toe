@@ -82,12 +82,12 @@ const players = (function () {
         currentPlayer = player;
     };
 
-    const getPlayer = () => {
-        return currentPlayer;
-    };
-
     const resetPlayer = () => {
         currentPlayer = playerX;
+    };
+
+    const getPlayer = () => {
+        return currentPlayer;
     };
 
     return {
@@ -98,8 +98,8 @@ const players = (function () {
     };
 })();
 
-const interface = (function () {
-    let cell = 0;
+const controller = (function () {
+    // let cell = 0;
     let game = true;
     let round = 1;
 
@@ -107,8 +107,8 @@ const interface = (function () {
         const board = gameBoard.getBoard();
         let string = "";
         for (const row of board) {
-            for (const column of row) {
-                string += column;
+            for (const cell of row) {
+                string += cell;
             }
             string += "\n";
         }
@@ -167,5 +167,25 @@ const interface = (function () {
     };
 })();
 
-interface.displayBoard();
-interface.askInput();
+controller.displayBoard();
+controller.askInput();
+
+function controlGUI() {
+    const cells = document.querySelectorAll(".container div");
+    console.log(cells);
+
+    // cells[1].textContent = "X";
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].addEventListener("click", (e) => {
+            if (players.getPlayer() === "X") {
+                controller.pick(i+1);
+                cells[i].textContent = "X";
+            } else {
+                controller.pick(i+1);
+                cells[i].textContent = "O";
+            }
+        });
+    }
+}
+
+controlGUI();
