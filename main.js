@@ -28,7 +28,7 @@ const gameBoard = (function () {
             || board[0][9] == "X" && board[1][9] == "X" && board[2][9] == "X"
             || board[2][1] == "X" && board[2][5] == "X" && board[2][9] == "X") {
                 players.assignWinner("X");
-                return false;
+                return true;
         }
         if (board[0][1] == "O" && board[0][5] == "O" && board[0][9] == "O"
             || board[0][1] == "O" && board[1][1] == "O" && board[2][1] == "O"
@@ -39,9 +39,9 @@ const gameBoard = (function () {
             || board[0][9] == "O" && board[1][9] == "O" && board[2][9] == "O"
             || board[2][1] == "O" && board[2][5] == "O" && board[2][9] == "O") {
                 players.assignWinner("O");
-                return false;
+                return true;
         }
-        return true;
+        return false;
     };
 
     const cleanBoard = () => {
@@ -101,7 +101,9 @@ const players = (function () {
 const controller = (function () {
     // let cell = 0;
     let game = true;
-    let round = 1;
+    let round = 0;
+    let checked = true;
+    let state = "";
 
     const displayBoard = () => {
         const board = gameBoard.getBoard();
@@ -118,15 +120,18 @@ const controller = (function () {
     const askInput = () => {
         console.log(round);
         console.log(`player ${players.getPlayer()}: pick a cell`);
+        state = players.getPlayer();
     };
 
     const declareResult = () => {
-        if (round < 10) {
-            console.log(`player ${players.getPlayer()} wins!`);
-            console.log("play again?");
-        } else {
+        if (round >= 9 && !checked) {
             console.log("it's a tie");
             console.log("play again?");
+            state = "tie";
+        } else {
+            console.log(`player ${players.getPlayer()} wins!`);
+            console.log("play again?");
+            state = "win";
         }
     };
 
@@ -146,8 +151,8 @@ const controller = (function () {
                 players.switchPlayer();
                 round++;
             }
-            game = gameBoard.checkGame();
-            if (round > 9) {
+            checked = gameBoard.checkGame();
+            if (round >= 9 || checked) {
                 game = false;
             }
             displayBoard();
@@ -160,16 +165,17 @@ const controller = (function () {
     };
 
     const getState = () => {
-        if (game === false && round < 10) {
-            return "win";
-        } else if (game === false) {
-            return "tie";
-        }
-        if (players.getPlayer() === "X") {
-            return "X";
-        } else {
-            return "O";
-        }
+        // if (game === false && round < 10) {
+        //     return "win";
+        // } else if (game === false) {
+        //     return "tie";
+        // }
+        // if (players.getPlayer() === "X") {
+        //     return "X";
+        // } else {
+        //     return "O";
+        // }
+        return state;
     };
 
     const getGame = () => {
