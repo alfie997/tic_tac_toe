@@ -121,7 +121,7 @@ const controller = (function () {
     };
 
     const declareResult = () => {
-        if (round < 9) {
+        if (round < 10) {
             console.log(`player ${players.getPlayer()} wins!`);
             console.log("play again?");
         } else {
@@ -160,7 +160,7 @@ const controller = (function () {
     };
 
     const getState = () => {
-        if (game === false && round < 9) {
+        if (game === false && round < 10) {
             return "win";
         } else if (game === false) {
             return "tie";
@@ -190,19 +190,43 @@ function controlGUI() {
     const cells = document.querySelectorAll(".container div");
     const retry = document.querySelector(".retry");
     const state = document.querySelector(".state");
+    const submit = document.querySelector(".submit");
     // console.log(cells);
+
+    document.getElementById("playerOne").value = "";
+    document.getElementById("playerTwo").value = "";
+
+    let playerOne = "";
+    let playerTwo = "";
 
     const displayState = () => {
         // state.textContent = ""
-        if (controller.getState() === "X") {
-            state.textContent = "player X to play"
-        } else if (controller.getState() === "O") {
-            state.textContent = "player O to play"
-        }
-        if (controller.getState() === "win") {
-            state.textContent = `player ${players.getPlayer()} wins`;
-        } else if (controller.getState() === "tie") {
-            state.textContent = "it's a tie";
+        if (playerOne === "" && playerTwo === "") {
+            if (controller.getState() === "X") {
+                state.textContent = "player X to play";
+            } else if (controller.getState() === "O") {
+                state.textContent = "player O to play";
+            }
+            if (controller.getState() === "win") {
+                state.textContent = `player ${players.getPlayer()} wins`;
+            } else if (controller.getState() === "tie") {
+                state.textContent = "it's a tie";
+            }
+        } else {
+            if (controller.getState() === "X") {
+                state.textContent = `${playerOne} to play`;
+            } else if (controller.getState() === "O") {
+                state.textContent = `${playerTwo} to play`;                
+            }
+            if (controller.getState() === "win") {
+                if (players.getPlayer() === "X") {
+                    state.textContent = `${playerOne} wins`;
+                } else if (players.getPlayer() === "O") {
+                    state.textContent = `${playerTwo} wins`;
+                }
+            } else if (controller.getState() === "tie") {
+                state.textContent = "it's a tie";
+            }
         }
     };
 
@@ -231,6 +255,14 @@ function controlGUI() {
             for (let i = 0; i < cells.length; i++) {
                 cells[i].textContent = "";
             }
+            displayState();
+        });
+
+        submit.addEventListener("click", (e) => {
+            playerOne = document.getElementById("playerOne").value;
+            playerTwo = document.getElementById("playerTwo").value;
+            console.log(playerOne);
+            console.log(playerTwo);
             displayState();
         });
     };

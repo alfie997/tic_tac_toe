@@ -29,6 +29,8 @@
 .container {
   height: 500px;
   width: 500px;
+  margin-left: auto;
+  margin-right: auto;
   border: 1px solid black;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
