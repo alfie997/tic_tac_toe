@@ -137,7 +137,7 @@ const controller = (function () {
 
     const retry = () => {
         game = true;
-        round = 1;
+        round = 0;
         gameBoard.cleanBoard();
         players.resetPlayer();
         displayBoard();
